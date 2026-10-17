@@ -1,16 +1,24 @@
+require('dotenv').config();
+
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var handlebars = require('hbs');
+var passport = require('passport');
 
+// Load database models BEFORE routes/controllers
+require('./app_api/models/db');
+
+// Configure Passport AFTER models are registered
+require('./app_api/config/passport');
+
+// Load routes AFTER models and Passport
 var indexRouter = require('./app_server/routes/index');
 var usersRouter = require('./app_server/routes/users');
 var travelRouter = require('./app_server/routes/travel');
 var apiRouter = require('./app_api/routes/index');
-var handlebars = require('hbs');
-
-require('./app_api/models/db');
 
 var app = express();
 
@@ -25,6 +33,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Initialize Passport
+app.use(passport.initialize());
+
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/travel', travelRouter);
@@ -35,7 +46,7 @@ app.use('/api', (req, res, next) => {
 
   res.header(
     'Access-Control-Allow-Headers',
-    'Origin, X-Requested-With, Content-Type, Accept',
+    'Origin, X-Requested-With, Content-Type, Accept, Authorization',
   );
 
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');

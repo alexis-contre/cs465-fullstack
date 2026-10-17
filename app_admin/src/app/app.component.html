@@ -1,8 +1,25 @@
 <nav class="navbar navbar-light bg-light mb-4">
   <div class="container-fluid">
-    <a class="navbar-brand" href="/">
-      Travlr Getaways
-    </a>
+    <a class="navbar-brand" routerLink="/"> Travlr Getaways </a>
+
+    <div class="ms-auto">
+      <a
+        *ngIf="!authenticationService.isLoggedIn()"
+        class="btn btn-outline-primary"
+        routerLink="/login"
+      >
+        Log In
+      </a>
+
+      <button
+        *ngIf="authenticationService.isLoggedIn()"
+        type="button"
+        class="btn btn-outline-danger"
+        (click)="logout()"
+      >
+        Log Out
+      </button>
+    </div>
   </div>
 </nav>
 

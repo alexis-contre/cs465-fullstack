@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 
 import { TripDataService } from '../services/trip-data.service';
-
+import { AuthenticationService } from '../services/authentication.service';
 @Component({
   selector: 'app-trip-card',
   standalone: true,
@@ -17,6 +17,7 @@ export class TripCardComponent implements OnInit {
   constructor(
     private router: Router,
     private tripDataService: TripDataService,
+    public authenticationService: AuthenticationService,
   ) {}
 
   ngOnInit(): void {}
